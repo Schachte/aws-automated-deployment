@@ -19,8 +19,8 @@ jobs:
         with:
           aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          application_name: beanstalk-simple-engineer
-          environment_name: BeanstalkSimpleEngineer-env
-          version_label: 12345
+          application_name: beanstalk-engineer-v2
+          environment_name: BeanstalkEngineerV2-env
+          version_label: $(echo $GITHUB_SHA | cut -c1-8)
           region: us-east-2
           deployment_package: deploy.zip
