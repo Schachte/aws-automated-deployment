@@ -1,0 +1,26 @@
+name: Test & Deploy
+on:
+  push:
+    branches:
+      - master
+jobs:
+  test-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Latest Repo
+        uses: actions/checkout@master
+
+      # Zip Dockerfile for upload
+      - name: Generate Deployment Package
+        run: zip -r deploy.zip * -x "**node_modules**"
+      
+      - name: Deploy to EB
+        uses: einaregilsson/beanstalk-deploy@v14
+        with:
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          application_name: beanstalk-simple-engineer
+          environment_name: BeanstalkSimpleEngineer-env
+          version_label: 12345
+          region: us-east-2
+          deployment_package: deploy.zip
